@@ -32,8 +32,8 @@ jobs:
             context: .
             push: true
             tags: |
-                ${{ secrets.DOCEKR_USERNAME}}/${{ env.DOCKER_IMAGE_NAME }}:latest
-                ${{ secrets.DOCEKR_USERNAME}}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+                ${{ secrets.DOCKER_USERNAME}}/${{ env.DOCKER_IMAGE_NAME }}:latest
+                ${{ secrets.DOCKER_USERNAME}}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
 
 
     
