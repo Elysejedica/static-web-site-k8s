@@ -1,9 +1,39 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
     push:
         branches: [ main, master]
-        pull_request:
-            branches: [main, master]
+    pull_request:
+        branches: [main, master]
 
+env:
+    DOCEKR_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    DOCKER_IMAGE_NAME: static-web-site-k8s-app
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
             
+        - name: setup docker buildx
+          uses: docker/setup-buildx-action@v2
+
+        - name: Login to Docker hub
+          uses: docker/login-action@v2
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+
+        - name: Build and push docker image
+          uses: docker/build-push-action@v4
+          with:
+            context: .
+            push: true
+            tags: |
+                ${{ secrets.DOCEKR_USERNAME}}/${{ env.DOCKER_IMAGE_NAME }}:latest
+                ${{ secrets.DOCEKR_USERNAME}}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+
+
+    
